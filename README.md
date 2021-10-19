@@ -14,7 +14,7 @@ The recorded data (see above) is in csv-files. This (Re)player allows you to mov
 ### CSV format
 It is important that the format of your csv-files is as follows (from left to right);
 
-1. ~Title~
+1. Title
 1. Position X
 1. Position Y
 1. Position Z
@@ -22,4 +22,13 @@ It is important that the format of your csv-files is as follows (from left to ri
 1. Rotation Y
 1. Rotation Z
 1. Rotation W
-1. ~Timestamp~
+1. Timestamp
+
+Again, for this the use of the UnityDataLogging package is recommended.
+
+## Use
+
+Simply add the `GameObjectMotionReplay.cs` file to your Unity assets and add it to a `GameObject`.
+Now drag the csv-file containing your data to the settings in the Inspector and (if needed) edit the scaling and speed.
+
+That's it!

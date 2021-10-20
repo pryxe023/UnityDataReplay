@@ -16,6 +16,8 @@ public class GameObjectMotionReplay : MonoBehaviour
     [SerializeField] public TextAsset csvFile;
     [Tooltip("Set a scaling-factor for the positions. Recommended to keep at 1.")]
     [SerializeField] public float scalingFactor = 1.0f;
+    [Tooltip("Set the replay speed. Recommended to keep at 1.")]
+    [SerializeField] public float playSpeed = 1.0f;
     private List<Step> steps;
     private int currentStep = 0;
 
@@ -30,7 +32,7 @@ public class GameObjectMotionReplay : MonoBehaviour
 
     void Update()
     {
-        if (currentStep < steps.Count - 1 && steps[currentStep].timestamp < Time.time)
+        if (currentStep < steps.Count - 1 && steps[currentStep].timestamp < playSpeed * Time.time)
         {
             ++currentStep;
 
@@ -39,7 +41,7 @@ public class GameObjectMotionReplay : MonoBehaviour
         }
 
         // Print the timestamp for debugging
-        Debug.Log("Replay time: " + steps[currentStep].timestamp + " | Real time: " + Time.time);
+        Debug.Log("Replay time: " + steps[currentStep].timestamp + "Real time: " + Time.time);
     }
 
     void readCSV()

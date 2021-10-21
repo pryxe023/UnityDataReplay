@@ -29,12 +29,19 @@ public class GameObjectMotionReplay : MonoBehaviour
     private int currentStep = 0;
     private int currentRep = 1;
     private float addedTime = 0.0f;
+    private bool allowReplay = false;
 
     void Start()
     {
         readCSV(); // Obtain the data from the csv-file
 
-        addedTime = 0.0f;
+        addedTime = 0.0f; // Make sure this value gets cleared each time the program runs.
+
+        // Make sure the replay cannot be stopped/started during runtime. This would mess up replay speed.
+        if (startReplay)
+        {
+            allowReplay = true;
+        }
 
         // Set the GameObject to the correct starting position and rotation
         this.transform.position = steps[0].destination;
@@ -46,7 +53,7 @@ public class GameObjectMotionReplay : MonoBehaviour
         // Print the timestamp for debugging
         Debug.Log("Replay time: " + steps[currentStep].timestamp + " | Real time: " + Time.time);
 
-        if (startReplay)
+        if (allowReplay)
         {
             if (currentStep < steps.Count - 1 && ((steps[currentStep].timestamp / playSpeed)) + addedTime < Time.time - waitReplay)
             {

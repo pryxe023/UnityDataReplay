@@ -11,15 +11,24 @@ public class GameObjectMotionReplay : MonoBehaviour
         public float timestamp;
     }
 
-    [Header("Replay settings")] // Input in the Unity inspector
+    [Header("File settings")] // Input in the Unity inspector
     [Tooltip("Select the csv-file containing the positions and rotations.")]
     [SerializeField] public TextAsset csvFile;
+    [Tooltip("Set a delay for when the replay starts playing (in seconds).")]
+    [SerializeField] public float waitReplay = 0.0f;
     [Tooltip("Set a scaling-factor for the positions. Recommended to keep at 1.")]
     [SerializeField] public float scalingFactor = 1.0f;
     [Tooltip("Set the replay speed. Recommended to keep at 1.")]
     [SerializeField] public float playSpeed = 1.0f;
+    [Tooltip("Set the number of repetitions for the replay to run.")]
+    [SerializeField] public int replayReps = 1;
+    [Tooltip("Turn the replay on or off. Mostly useful for testing.")]
+    [SerializeField] public bool startReplay = true;
+    
     private List<Step> steps;
     private int currentStep = 0;
+    private int currentRep = 1;
+    private float addedTime = 0.0f;
 
     void Start()
     {
@@ -32,28 +41,39 @@ public class GameObjectMotionReplay : MonoBehaviour
 
     void Update()
     {
-        if (currentStep < steps.Count - 1 && steps[currentStep].timestamp < playSpeed * Time.time)
-        {
-            ++currentStep;
-
-            // Apply the movements and rotations
-            this.transform.SetPositionAndRotation(steps[currentStep].destination, steps[currentStep].rotationgoal);
-        }
-
         // Print the timestamp for debugging
-        Debug.Log("Replay time: " + steps[currentStep].timestamp + "Real time: " + Time.time);
+        Debug.Log("Replay time: " + steps[currentStep].timestamp + " | Real time: " + Time.time);
+
+        if (startReplay)
+        {
+            if (currentStep < steps.Count - 1 && ((steps[currentStep].timestamp / playSpeed) + waitReplay) * currentRep < Time.time)
+            {
+                ++currentStep;
+
+                // Apply the movements and rotations
+                this.transform.SetPositionAndRotation(steps[currentStep].destination, steps[currentStep].rotationgoal);
+            }
+
+            if (currentStep == steps.Count - 1 && currentRep < replayReps)
+            {
+                ++currentRep;
+                addedTime = Time.time;
+                currentStep = 0;
+            }
+        }
     }
 
     void readCSV()
     {
         steps = new List<Step>();
         string[] records = csvFile.text.Split('\n');
-        for (int i = 1; i < records.Length; i++) // Start from i = 1, we don't want the headers to be included
+
+        for (int i = 1; i < records.Length - 1; i++) // Start from i = 1, we don't want the headers to be included
         {
             string[] array = records[i].Split(',');
 
             steps.Add(
-                new Step()
+            new Step()
                 {
                     destination = new Vector3(float.Parse(array[1]) * scalingFactor, float.Parse(array[2]) * scalingFactor, float.Parse(array[3]) * scalingFactor),
                     rotationgoal = new Quaternion(float.Parse(array[4]), float.Parse(array[5]), float.Parse(array[6]), float.Parse(array[7])),

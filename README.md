@@ -34,5 +34,4 @@ That's it!
 
 ## Future updates
 
-I am considering adding a central Replay Manager to add to a separate GameObject in which you can set the scaling and replay speed for all GameObject at once.
-Possibly you could just link all the GameObjects to a csv-file here.
+Working on implementing a replay manager that can turn replay on/off, add replay-repetitions and manage replay speed and scaling for all GameObjects being replayed.

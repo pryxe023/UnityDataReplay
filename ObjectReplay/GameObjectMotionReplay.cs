@@ -34,6 +34,8 @@ public class GameObjectMotionReplay : MonoBehaviour
     {
         readCSV(); // Obtain the data from the csv-file
 
+        addedTime = 0.0f;
+
         // Set the GameObject to the correct starting position and rotation
         this.transform.position = steps[0].destination;
         this.transform.rotation = steps[0].rotationgoal;
@@ -46,7 +48,7 @@ public class GameObjectMotionReplay : MonoBehaviour
 
         if (startReplay)
         {
-            if (currentStep < steps.Count - 1 && ((steps[currentStep].timestamp / playSpeed) + waitReplay) * currentRep < Time.time)
+            if (currentStep < steps.Count - 1 && ((steps[currentStep].timestamp / playSpeed)) + addedTime < Time.time - waitReplay)
             {
                 ++currentStep;
 

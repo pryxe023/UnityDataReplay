@@ -35,3 +35,9 @@ That's it!
 ## Future updates
 
 Working on implementing a replay manager that can turn replay on/off, add replay-repetitions and manage replay speed and scaling for all GameObjects being replayed.
+
+### Known issues
+
+* ReplayManager.cs doesn't do anything yet.
+* Problem with multiple repetitions where the repetitions start really slow and then speed up to end at the "correct" time.
+* Problem with the delay for the replay in combination with multiple repetitions.

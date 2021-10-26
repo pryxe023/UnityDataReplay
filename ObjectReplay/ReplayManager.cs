@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ManagerTest : MonoBehaviour
+public class ReplayManager : MonoBehaviour
 {
 
     [Header("General replay settings")] // Input in the Unity inspector
@@ -18,7 +18,7 @@ public class ManagerTest : MonoBehaviour
     [SerializeField] public bool startReplay = true;
 
     [Header("Objects to replay")] // Array of GameObjects that can be replayed
-    [SerializeField] public ReplayTest[] replayObjects;
+    [SerializeField] public GameObjectMotionReplay[] replayObjects;
 
     private int currentStep = 0;
     private int currentRep = 1;

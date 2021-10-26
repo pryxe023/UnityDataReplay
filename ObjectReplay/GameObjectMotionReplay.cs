@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ReplayTest : MonoBehaviour
+public class GameObjectMotionReplay : MonoBehaviour
 {
 
     [Header("File settings")] // Input in the Unity inspector

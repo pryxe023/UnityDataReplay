@@ -43,4 +43,4 @@ Nothing in the works right now.
 
 ### Known issues
 
-* It looks like there might be some problems when running more than 2 replays at the same time.
+* Currently; none!

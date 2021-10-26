@@ -27,17 +27,20 @@ Again, for this the use of the UnityDataLogging package with the GameObject logg
 
 ## Use
 
-Simply add the `GameObjectMotionReplay.cs` file to your Unity assets and add it to a `GameObject`.
-Now drag the csv-file containing your data to the settings in the Inspector and (if needed) edit the scaling and speed.
+Simply add the `GameObjectMotionReplay.cs` and `ReplayManager.cs` files to your Unity assets.
+
+Create `GameObject`s to be controlled by the scripts. Attach the `GameObjectMotionReplay.cs` to each `GameObject`.
+In this script, attach the csv-file containing the positional and rotational data to the correct `GameObject`.
+
+Next, create an empty `GameObject` (and for simplicity call it 'Replay Manager') and attach the `ReplayManager.cs` script to it.
+Here you can change general settings and connect the replayable instances of `GameObject` to the manager.
 
 That's it!
 
 ## Future updates
 
-Working on implementing a replay manager that can turn replay on/off, add replay-repetitions and manage replay speed and scaling for all GameObjects being replayed.
+Nothing in the works right now.
 
 ### Known issues
 
-* ReplayManager.cs doesn't do anything yet.
-* Problem with multiple repetitions where the repetitions start really slow and then speed up to end at the "correct" time.
-* Problem with the delay for the replay in combination with multiple repetitions.
+* It looks like there might be some problems when running more than 2 replays at the same time.

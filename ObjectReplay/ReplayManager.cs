@@ -54,34 +54,33 @@ public class ReplayManager : MonoBehaviour
             allSteps.Add(i,steps);
 
             // Set the GameObject to the correct starting position and rotation
-            replayObjects[i].transform.position = allSteps[i][0].destination;
-            replayObjects[i].transform.rotation = allSteps[i][0].rotationgoal;
+            // replayObjects[i].transform.position = allSteps[i][0].destination;
+            // replayObjects[i].transform.rotation = allSteps[i][0].rotationgoal;
         }
     }
 
     void Update()
     {
-        for (int i = 0; i < replayObjects.Length; i++)
+        if (allowReplay)
         {
-            // Print the timestamp for debugging
-            Debug.Log("Replay time: " + allSteps[i][currentStep].timestamp + " | Real time: " + Time.time);
-
-            if (allowReplay)
+            if (currentStep < allSteps[0].Count - 1 && ((allSteps[0][currentStep].timestamp / playSpeed)) + addedTime < Time.time - waitReplay)
             {
-                if (currentStep < allSteps[i].Count - 1 && ((allSteps[i][currentStep].timestamp / playSpeed)) + addedTime < Time.time - waitReplay)
-                {
-                    ++currentStep;
+                ++currentStep;
 
+                // Display replay timestamp & running timestamp for debugging
+                Debug.Log("Replay time: " + allSteps[0][currentStep].timestamp + " | Running time: " + Time.time);
+
+                for (int i = 0; i < replayObjects.Length; i++)
+                {
                     // Apply the movements and rotations
                     replayObjects[i].transform.SetPositionAndRotation(allSteps[i][currentStep].destination, allSteps[i][currentStep].rotationgoal);
                 }
-
-                if (currentStep == allSteps[i].Count - 1 && currentRep < replayReps)
-                {
-                    ++currentRep;
-                    addedTime = Time.time;
-                    currentStep = 0;
-                }
+            }
+            if (currentStep == allSteps[0].Count - 1 && currentRep < replayReps)
+            {
+                ++currentRep;
+                addedTime = Time.time;
+                currentStep = 0;
             }
         }
     }

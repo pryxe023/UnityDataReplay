@@ -6,10 +6,6 @@ To record data from Unity, I've used Alex's (https://github.com/Avdbergnmf) Unit
 ## How it works
 The recorded data (see above) is in csv-files. This (Re)player allows you to move GameObjects based on the information in these csv-files.
 
-**This is still a work in progress.**
-
-:construction:
-
 ### CSV format
 It is important that the format of your csv-files is as follows (from left to right);
 
@@ -39,7 +35,7 @@ That's it!
 
 ## Future updates
 
-Nothing in the works right now.
+Nothing in the works right now, but I might edit the script to find the correct values (position X, rotation X, etc. etc.) based on the headers in the csv-file automatically. This isn't difficult to implement, but not necessary for my needs currently. However, feel free to fork this project and implement it (or send me a message if you really want me to implement it).
 
 ### Known issues
 

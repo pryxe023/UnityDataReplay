@@ -54,8 +54,8 @@ public class ReplayManager : MonoBehaviour
             allSteps.Add(i,steps);
 
             // Set the GameObject to the correct starting position and rotation
-            // replayObjects[i].transform.position = allSteps[i][0].destination;
-            // replayObjects[i].transform.rotation = allSteps[i][0].rotationgoal;
+            replayObjects[i].transform.position = allSteps[i][0].destination;
+            replayObjects[i].transform.rotation = allSteps[i][0].rotationgoal;
         }
     }
 
@@ -63,12 +63,12 @@ public class ReplayManager : MonoBehaviour
     {
         if (allowReplay)
         {
+            // Display replay timestamp & running timestamp for debugging
+            Debug.Log("Replay time: " + allSteps[0][currentStep].timestamp + " | Running time: " + Time.time);
+
             if (currentStep < allSteps[0].Count - 1 && ((allSteps[0][currentStep].timestamp / playSpeed)) + addedTime < Time.time - waitReplay)
             {
                 ++currentStep;
-
-                // Display replay timestamp & running timestamp for debugging
-                Debug.Log("Replay time: " + allSteps[0][currentStep].timestamp + " | Running time: " + Time.time);
 
                 for (int i = 0; i < replayObjects.Length; i++)
                 {
@@ -88,6 +88,7 @@ public class ReplayManager : MonoBehaviour
     List<Step> readCSV(TextAsset csv_fileName)
     {
         var steps = new List<Step>();
+        float lastStamp = 0.0f;
         
         string[] records = csv_fileName.text.Split('\n');
 
@@ -95,14 +96,19 @@ public class ReplayManager : MonoBehaviour
         {
             string[] array = records[i].Split(',');
 
-            steps.Add(
-            new Step()
-                {
-                    destination = new Vector3(float.Parse(array[1]) * scalingFactor, float.Parse(array[2]) * scalingFactor, float.Parse(array[3]) * scalingFactor),
-                    rotationgoal = new Quaternion(float.Parse(array[4]), float.Parse(array[5]), float.Parse(array[6]), float.Parse(array[7])),
-                    timestamp = float.Parse(array[8])
-                }
-            );
+            if (lastStamp != float.Parse(array[8])) // Check for double entries (at same timestep)
+            {
+                steps.Add(
+                new Step()
+                    {
+                        destination = new Vector3(float.Parse(array[1]) * scalingFactor, float.Parse(array[2]) * scalingFactor, float.Parse(array[3]) * scalingFactor),
+                        rotationgoal = new Quaternion(float.Parse(array[4]), float.Parse(array[5]), float.Parse(array[6]), float.Parse(array[7])),
+                        timestamp = float.Parse(array[8])
+                    }
+                );
+
+                lastStamp = float.Parse(array[8]); // Update the lastStamp variable to check in next iteration
+            }
         }
 
         return steps;

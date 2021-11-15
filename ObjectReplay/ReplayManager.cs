@@ -21,6 +21,10 @@ public class ReplayManager : MonoBehaviour
     [Tooltip("Show the replay timestamp and current runtime. Mostly useful for testing and debugging.")]
     [SerializeField] public bool showTimeStamps = false;
 
+    [Header("Recording settings")]
+    [Tooltip("If the gameobjects were scaled during the recording, use that scale. If you don't know, keep at 1.")]
+    [SerializeField] public float scalingRecording = 1.0f;
+
     [Header("Objects to replay")] // Array of GameObjects that can be replayed
     [SerializeField] public GameObjectMotionReplay[] replayObjects;
 
@@ -53,7 +57,7 @@ public class ReplayManager : MonoBehaviour
             allSteps.Add(i,steps);
 
             // Set the GameObject to the correct starting position and rotation
-            replayObjects[i].transform.position = allSteps[i][0].destination * scalingFactor;
+            replayObjects[i].transform.position = allSteps[i][0].destination * (scalingFactor / scalingRecording);
             replayObjects[i].transform.rotation = allSteps[i][0].rotationgoal;
         }
     }
@@ -82,7 +86,7 @@ public class ReplayManager : MonoBehaviour
                 for (int i = 0; i < replayObjects.Length; i++)
                 {
                     // Apply the movements and rotations
-                    replayObjects[i].transform.SetPositionAndRotation(allSteps[i][currentStep].destination * scalingFactor, allSteps[i][currentStep].rotationgoal);
+                    replayObjects[i].transform.SetPositionAndRotation(allSteps[i][currentStep].destination * (scalingFactor / scalingRecording), allSteps[i][currentStep].rotationgoal);
                 }
             }
             if (currentStep == allSteps[0].Count - 1 && currentRep < replayReps)

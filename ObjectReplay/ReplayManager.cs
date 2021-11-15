@@ -6,7 +6,7 @@ public class ReplayManager : MonoBehaviour
 {
 
     [Header("General replay settings")] // Input in the Unity inspector
-    [Tooltip("Set a delay for when the replay starts playing (in seconds).")]
+    [Tooltip("Set a delay for when the replay starts playing (in seconds). This is also the delay between replay-repetitions.")]
     [SerializeField] public float waitReplay = 0.0f;
     [Tooltip("Set a scaling-factor for the positions. Recommended to keep at 1.")]
     [SerializeField] public float scalingFactor = 1.0f;
@@ -66,7 +66,7 @@ public class ReplayManager : MonoBehaviour
     {
         if (!startReplay)
         {
-            pauseTime = Time.time - playTime;
+            pauseTime += Time.deltaTime;
         }
 
         if (startReplay)
@@ -76,7 +76,7 @@ public class ReplayManager : MonoBehaviour
             if (showTimeStamps)
             {
                 // Display replay timestamp & running timestamp for debugging
-                Debug.Log("Replay time: " + playTime + " | Running time: " + Time.time); 
+                Debug.Log("Replay time: " + playTime + " | Running time: " + Time.time + " | Total paused time: " + pauseTime); 
             }
 
             if (currentStep < allSteps[0].Count - 1 && ((playTime / playSpeed)) + addedTime < Time.time - waitReplay - pauseTime)

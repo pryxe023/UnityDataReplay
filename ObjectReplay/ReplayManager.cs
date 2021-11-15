@@ -14,8 +14,12 @@ public class ReplayManager : MonoBehaviour
     [SerializeField] public float playSpeed = 1.0f;
     [Tooltip("Set the number of repetitions for the replay to run.")]
     [SerializeField] public int replayReps = 1;
-    [Tooltip("Turn the replay on or off. Mostly useful for testing.")]
+
+    [Header("Replay controls")]
+    [Tooltip("Start or stop the replay.")]
     [SerializeField] public bool startReplay = true;
+    [Tooltip("Show the replay timestamp and current runtime. Mostly useful for testing and debugging.")]
+    [SerializeField] public bool showTimeStamps = false;
 
     [Header("Objects to replay")] // Array of GameObjects that can be replayed
     [SerializeField] public GameObjectMotionReplay[] replayObjects;
@@ -23,6 +27,8 @@ public class ReplayManager : MonoBehaviour
     private int currentStep = 0;
     private int currentRep = 1;
     private float addedTime = 0.0f;
+    private float pauseTime = 0.0f;
+    private float playTime = 0.0f;
     private bool allowReplay = false;
 
     private struct Step
@@ -37,12 +43,6 @@ public class ReplayManager : MonoBehaviour
     void Start()
     {
         addedTime = 0.0f; // Make sure this value gets cleared each time the program runs.
-
-        // Make sure the replay cannot be stopped/started during runtime. This would mess up replay speed.
-        if (startReplay)
-        {
-            allowReplay = true;
-        }
 
         TextAsset[] csvFiles = new TextAsset[replayObjects.Length];
 
@@ -61,12 +61,22 @@ public class ReplayManager : MonoBehaviour
 
     void Update()
     {
-        if (allowReplay)
+        if (!startReplay)
         {
-            // Display replay timestamp & running timestamp for debugging
-            Debug.Log("Replay time: " + allSteps[0][currentStep].timestamp + " | Running time: " + Time.time);
+            pauseTime = Time.time - playTime;
+        }
 
-            if (currentStep < allSteps[0].Count - 1 && ((allSteps[0][currentStep].timestamp / playSpeed)) + addedTime < Time.time - waitReplay)
+        if (startReplay)
+        {
+            playTime = allSteps[0][currentStep].timestamp;
+
+            if (showTimeStamps)
+            {
+                // Display replay timestamp & running timestamp for debugging
+                Debug.Log("Replay time: " + playTime + " | Running time: " + Time.time); 
+            }
+
+            if (currentStep < allSteps[0].Count - 1 && ((playTime / playSpeed)) + addedTime < Time.time - waitReplay - pauseTime)
             {
                 ++currentStep;
 

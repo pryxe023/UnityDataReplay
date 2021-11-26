@@ -36,4 +36,4 @@ Nothing in the works right now, but I might edit the script to find the correct 
 
 ### Known issues
 
-* Unity seems to be unable (sometimes) to play the replay fast enough to keep up with the actual time. May need to skip some timesteps to fix this.
+* Unity seems to be unable (sometimes) to play the replay fast enough. Added a 100 Hz maximum sampling frequency (line 109 in `ReplayManager.cs`) which seems to do the trick.

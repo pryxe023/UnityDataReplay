@@ -106,7 +106,7 @@ public class ReplayManager : MonoBehaviour
         {
             string[] array = records[i].Split(',');
 
-            if (lastStamp != float.Parse(array[6])) // Check for double entries (at same timestep)
+            if (float.Parse(array[6]) - lastStamp >= 0.01) // Make sure the timestep is at least 0.01 s (100 Hz) after the last one so Unity can keep up.
             {
                 steps.Add(
                 new Step()

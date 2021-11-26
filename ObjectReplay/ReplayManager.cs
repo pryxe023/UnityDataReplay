@@ -21,10 +21,6 @@ public class ReplayManager : MonoBehaviour
     [Tooltip("Show the replay timestamp and current runtime. Mostly useful for testing and debugging.")]
     [SerializeField] public bool showTimeStamps = false;
 
-    [Header("Recording settings")]
-    [Tooltip("If the gameobjects were scaled during the recording, use that scale. If you don't know, keep at 1.")]
-    [SerializeField] public float scalingRecording = 1.0f;
-
     [Header("Objects to replay")] // Array of GameObjects that can be replayed
     [SerializeField] public GameObjectMotionReplay[] replayObjects;
 
@@ -39,6 +35,7 @@ public class ReplayManager : MonoBehaviour
         public Vector3 destination;
         public Quaternion rotationgoal;
         public float timestamp;
+        public float scalingRecording;
     }
 
     private Dictionary<int, List<Step>> allSteps = new Dictionary<int, List<Step>>();
@@ -57,7 +54,7 @@ public class ReplayManager : MonoBehaviour
             allSteps.Add(i,steps);
 
             // Set the GameObject to the correct starting position and rotation
-            replayObjects[i].transform.position = allSteps[i][0].destination * (scalingFactor / scalingRecording);
+            replayObjects[i].transform.position = allSteps[i][0].destination * (scalingFactor / allSteps[i][0].scalingRecording);
             replayObjects[i].transform.rotation = allSteps[i][0].rotationgoal;
         }
     }
@@ -86,7 +83,7 @@ public class ReplayManager : MonoBehaviour
                 for (int i = 0; i < replayObjects.Length; i++)
                 {
                     // Apply the movements and rotations
-                    replayObjects[i].transform.SetPositionAndRotation(allSteps[i][currentStep].destination * (scalingFactor / scalingRecording), allSteps[i][currentStep].rotationgoal);
+                    replayObjects[i].transform.SetPositionAndRotation(allSteps[i][currentStep].destination * (scalingFactor / allSteps[i][currentStep].scalingRecording), allSteps[i][currentStep].rotationgoal);
                 }
             }
             if (currentStep == allSteps[0].Count - 1 && currentRep < replayReps)
@@ -109,18 +106,19 @@ public class ReplayManager : MonoBehaviour
         {
             string[] array = records[i].Split(',');
 
-            if (lastStamp != float.Parse(array[8])) // Check for double entries (at same timestep)
+            if (lastStamp != float.Parse(array[6])) // Check for double entries (at same timestep)
             {
                 steps.Add(
                 new Step()
                     {
-                        destination = new Vector3(float.Parse(array[1]), float.Parse(array[2]), float.Parse(array[3])),
-                        rotationgoal = new Quaternion(float.Parse(array[4]), float.Parse(array[5]), float.Parse(array[6]), float.Parse(array[7])),
-                        timestamp = float.Parse(array[8])
+                        destination = new Vector3(float.Parse(array[0]), float.Parse(array[1]), float.Parse(array[2])),
+                        rotationgoal = Quaternion.Euler(new Vector3(float.Parse(array[3]), float.Parse(array[4]), float.Parse(array[5]))),
+                        timestamp = float.Parse(array[6]),
+                        scalingRecording = float.Parse(array[7])
                     }
                 );
 
-                lastStamp = float.Parse(array[8]); // Update the lastStamp variable to check in next iteration
+                lastStamp = float.Parse(array[6]); // Update the lastStamp variable to check in next iteration
             }
         }
 

@@ -1,7 +1,7 @@
 # UnityDataReplay
 A system for replaying recorded motions (position and rotation data) in Unity.
 
-To record data from Unity, I've used Alex's (https://github.com/Avdbergnmf) UnityDataLogging package with my (super simple) GameObject logger found in my fork (https://github.com/pryxe023/UnityDataLogging).
+This script uses data recorded and saved using my UnityToMatlabUDP project (https://github.com/pryxe023/UnityToMatlabUDP).
 
 ## How it works
 The recorded data (see above) is in csv-files. This (Re)player allows you to move GameObjects based on the information in these csv-files.
@@ -9,17 +9,14 @@ The recorded data (see above) is in csv-files. This (Re)player allows you to mov
 ### CSV format
 It is important that the format of your csv-files is as follows (from left to right);
 
-1. Title
 1. Position X
 1. Position Y
 1. Position Z
 1. Rotation X
 1. Rotation Y
 1. Rotation Z
-1. Rotation W
 1. Timestamp
-
-Again, for this the use of the UnityDataLogging package with the GameObject logger (see above) is recommended.
+1. Scale of recording (useful when playing on a scaled object)
 
 ## Use
 
@@ -39,4 +36,4 @@ Nothing in the works right now, but I might edit the script to find the correct 
 
 ### Known issues
 
-* Currently; none!
+* Unity seems to be unable (sometimes) to play the replay fast enough to keep up with the actual time. May need to skip some timesteps to fix this.
